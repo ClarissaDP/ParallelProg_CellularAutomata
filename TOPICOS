@@ -1,0 +1,44 @@
+Possíveis temas conversados com o professor:
+
+- Automatos celulares - Cellular Automaton
+  -> Conway's Game of Life (Se nada mais desse certo . Ou apenas como base)
+    * http://golly.sourceforge.net/
+  -> Theoretical biology and Microstructure modeling (Pesquisar se seria interessante e/ou muito complexo)
+
+-> ACs para estudo de caso em espalhamento de epidemias
+-> ACs para simulação de uma suposta competitividade entre uma célula biológica e um antígeno
+	--> Criação de uma situação em que um víus ou ontro agente externo ataca uma célula.
+
+
+Plataformas:
+- OpenMP
+- Cuda			*Placa Gráfica 
+	- OpenCL	*Placa Gráfica
+
+  * Cuda = comparar entre os tipos que tem. 3 máquinas?
+
+Links:
+- http://pt.slideshare.net/iaudesc/autmatos-celulares-8250586
+- http://pt.slideshare.net/eisbm/understanding-and-predicting-biological-complex-system
+- http://www.mackenzie.br/7489.html
+
+- Special...:  http://www.ppgee.ufmg.br/defesas/335M.PDF
+
+- http://sd.ist.utl.pt/NonLinear_Dynamics_Group/Awareness_files/12-1.PDF
+- http://mtc-m16.sid.inpe.br/col/sid.inpe.br/iris@1916/2005/09.30.14.21/doc/sociedade%20artificial.pdf
+- http://scholar.lib.vt.edu/theses/available/etd-02222007-110205/unrestricted/Farid_Thesis.pdf
+- http://www.lbd.dcc.ufmg.br/colecoes/wcama/2013/009.pdf
+
+- http://www.eati.info/eati/2013/assets/anais/artigo163.pdf  ** ver
+
+- http://www.diva-portal.org/smash/get/diva2:351877/FULLTEXT01.pdf
+  * The hodgepodge machine (pag. 33 - 43)
+
+Anotações:
+ * Paralelismo de número aleatório - função separada (problema com o SO).
+   -> Salvar/fixar uma sequência para testes, para poder comparar.
+ * Quantizar (colocar números) no ganho/perca por percorrer a matriz de forma contínua e descontínua. Testes de custo - artigo. 
+ Comparação com a forma de filtro (vizinhança) - contínua, descontínua e vizinhança.
+
+* Bater sequencial!
+

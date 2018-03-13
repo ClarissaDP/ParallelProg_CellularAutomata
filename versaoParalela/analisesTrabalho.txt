@@ -1,0 +1,391 @@
+
+Alterações de pragma:
+
+Observações: Testes feitos com 8 threads (cohiba), tamanho de matriz fixo em 200x200, por 200 iterações em 10 execuções de cada. 
+
+	Para essas especificações:
+		* Sequencial:
+			Media = 0.79963822364807124465
+			DesvioP = 0.01349418092629573428
+
+
+- Para o for da chamada principal da função na main.c:
+	* Para for apenas nas colunas: 		Media = 0.34367473125457764782
+										DesvioP = 0.01340255333167779915
+	* Para for nas linhas e colunas: 	Media = 0.15960254669189452570
+										DesvioP = 0.05279556616818403825
+	* Para for apenas nas linhas:		Media = 0.13425731658935546875	
+										DesvioP = 0.00562966738534098707
+
+	Final: Melhor aplicar o for apenas nas linhas desse laço.
+
+
+Observações: A partir de agora trabalho com o laço nas linhas (como dito em cima).
+
+
+- Considerando o tempo da inicialização das matrizes:
+	* Como estava antes, contando inicialização:	Media = 0.13928959369659424383
+													DesvioP = 0.00516573317601671123
+	* Paralelizando os fors (sem scanf):			Media = 0.17811858654022216797
+													DesvioP = 0.10836348268219848923
+	
+	Final: Comparando entre paralelizar esse ponto ou não, teve pouca diferença ou até perda, onde a maior variação ocorria devido picos de uma execução (valores maiores aleatórios).
+
+
+- Para a vacinaPulsada
+	* Apenas no segundo for:		Media = 0.14049804210662841797
+									DesvioP = 0.00677074491718941424
+	* Apena o primeiro for: 		Media = 0.13844518661499022327
+									DesvioP = 0.00058338793878281135
+	* Nos dois fors:				Media = 0.14408586025238037664
+									DesvioP = 0.01078992557763234529
+
+	Final: Como quase não houve mudança ou até uma piora, não colocarei no final.
+
+
+- Variações clause for Maior:
+	* Static N/4:	 		Media = 0.26299686431884766735
+							DesvioP = 0.00299762860843696835
+	* Static N/8:			Media = 0.12957453727722167969
+							DesvioP = 0.00327046784389313895
+	* Guided N/4:			Media = 0.28646183013916015625
+							DesvioP = 0.00229230430502411426
+	* Guided N/8:			Media = 0.15351328849792481024
+							DesvioP = 0.01645606946501221302
+	* Dynamic:				Media = 0.15855762958526611883
+							DesvioP = 0.00845760555339297726
+	* Auto:					Media = 0.16734123229980468750
+							DesvioP = 0.05689307962655280188
+	* Runtime:				Media = 0.15766661167144774280
+							DesvioP = 0.00021525081212461428
+
+	Final: Houve apenas uma clause que mostrou um ganho. Static N/8.
+
+		- Pra Static para o tamanho máximo de threads:
+			* Threads 16 normal:	Media = 0.07398157119750976840
+									DesvioP = 0.00224121977461784689
+ 			* Threads 16 static:	Media = 0.13864979743957520086					-> uma entrada, mais comum, 0.10295844078063964844
+									DesvioP = 0.08259359125394309664
+			* Com 4 também não houve ganho.
+
+	Final: Como houve ganho (não tão grande) apenas para static com Threads == 8, não usarei clause. 
+
+
+Desse modo o Final ficou: 
+	Media = 0.13289685249328614391
+	DesvioP = 0.00055006664133480101
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+Análise para o código (pragmas) definido(s):
+
+Observações: Irei variar por tamanho de matriz, com variações de quantidade de iterações por cada matriz, e variação de quantidade de threads para cada uma na versão paralela.
+		Declarando:
+			10x10 -> 	100, 200, 400, 800 interações   ->	Sequencial, 2, 4, 8, 16 Theads.
+			100x100 ->	100, 200, 400, 800 interações   ->	Sequencial, 2, 4, 8, 16 Theads.
+			300x300	->	100, 200, 400, 800 interações   ->	Sequencial, 2, 4, 8, 16 Theads.
+			600x600	->	100, 200, 400, 800 interações   ->	Sequencial, 2, 4, 8, 16 Theads.
+
+- 10x10:
+	* Sequencial:	
+			# 100:	Media = 0.00116553306579589852
+					DesvioP = 0.00002491609898204739
+			# 200:	Media = 0.00227286815643310556
+					DesvioP = 0.00001202086047884557
+			# 400:	Media = 0.00453798770904541033
+					DesvioP = 0.00001676815003175035
+			# 800:	Media = 0.00909593105316162075
+					DesvioP = 0.00005471230571394984
+	* 2:
+			# 100: 	Media = 0.00096836090087890623
+					DesvioP = 0.00001131280455766728
+			# 200:	Media = 0.00185976028442382804
+					DesvioP = 0.00003062490128782083
+			# 400:	Media = 0.00358543395996093741
+					DesvioP = 0.00005457579904368500
+			# 800:	Media = 0.00713891983032226545
+					DesvioP = 0.00010407722255947768
+	* 4:
+			# 100:	Media = 0.00083272457122802730
+					DesvioP = 0.00003594337802181177
+			# 200:	Media = 0.00146210193634033203
+					DesvioP = 0.00003970471149379222
+			# 400: 	Media = 0.00286183357238769523
+					DesvioP = 0.00007723659566230967
+			# 800:	Media = 0.00552365779876709019
+					DesvioP = 0.00019137167273554465
+	* 8: 
+			# 100:	Media = 0.00106022357940673819
+					DesvioP = 0.00005595887216618907
+			# 200:	Media = 0.00187394618988037101
+					DesvioP = 0.00011831806104981723
+			# 400:	Media = 0.00325818061828613264
+					DesvioP = 0.00011602609225864597
+			# 800:	Media = 0.00645143985748290998
+					DesvioP = 0.00024619710292439316
+	* 16:	
+			# 100:	Media = 0.12625520229339598499
+					DesvioP = 0.00238856770062585537
+			# 200:	Media = 0.25107653141021729626
+					DesvioP = 0.00223593444114360100
+			# 400:	Media = 0.49963896274566649280	
+					DesvioP = 0.00295851573774506436
+			# 800:	Media = 0.99835975170135493606
+					DesvioP = 0.01645455304042639164
+
+
+- 100x100:
+	* Sequencial: 
+		# 100:	Media = 0.11808664798736571988
+				DesvioP = 0.00020935901974882887
+		# 200:	Media = 0.23604676723480225164
+				DesvioP = 0.00041698584008593428
+		# 400:	Media = 0.47215948104858396217
+				DesvioP = 0.00092593240909304923
+		# 800:	Media = 0.94337511062622070312
+				DesvioP = 0.00153954437277560238
+	* 2:
+		# 100:	Media = 0.06163082122802734236
+				DesvioP = 0.00024031767755304290
+		# 200:	Media = 0.12310416698455810269
+				DesvioP = 0.00034477761833554531
+		# 400:	Media = 0.24616067409515379749
+				DesvioP = 0.00103168732650461815
+		# 800:	Media = 0.49148848056793215111
+				DesvioP = 0.00048344460982130329
+	* 4:
+		# 100:	Media = 0.03172223567962646762
+				DesvioP = 0.00009178521087536558
+		# 200:	Media = 0.06319885253906250278
+				DesvioP = 0.00013704086725465338
+		# 400:	Media = 0.13866610527038575329
+				DesvioP = 0.02518472927436717773
+		# 800:	Media = 0.25169687271118162952
+				DesvioP = 0.00025424668864183319
+	* 8:
+		# 100:	Media = 0.01764426231384277205
+				DesvioP = 0.00005853466970671818
+		# 200:	Media = 0.03575916290283202847
+				DesvioP = 0.00228335114222526052	
+		# 400:	Media = 0.06899170875549316684
+				DesvioP = 0.00026757201648067928
+		# 800:	Media = 0.13739619255065918524
+				DesvioP = 0.00056923909642576042
+	* 16:
+		# 100:	Media = 0.12764153480529785711
+				DesvioP = 0.00659652466428537962
+		# 200:	Media = 0.28065798282623288795
+				DesvioP = 0.01387104924523980577
+		# 400:	Media = 0.51719417572021486595
+				DesvioP = 0.02159190210488338632
+		# 800:	Media = 1.03625407218933096587
+				DesvioP = 0.06531880125984317054
+
+- 300x300:
+	* Sequencial:
+		# 100:	Media = 0.74295146465301509231
+				DesvioP = 0.00228763516970020625
+		# 200:	Media = 1.48226375579833979934
+				DesvioP = 0.00505590676271914802
+		# 400:	Media = 2.96474106311798113467
+				DesvioP = 0.01083133650435683451
+		# 800:	Media = 5.93280451297759992002
+				DesvioP = 0.01708653929495897519
+	* 2:
+		# 100:	Media = 0.57958028316497800514
+				DesvioP = 0.00174707621070037031
+		# 200:	Media = 1.15947768688201913179
+				DesvioP = 0.00130311657601548639
+		# 400:	Media = 2.32529542446136483491
+				DesvioP = 0.01018059558228269317
+		# 800:	Media = 4.66667621135711652158
+				DesvioP = 0.02401676291000217831
+	* 4:
+		# 100:	Media = 0.29964203834533692516
+				DesvioP = 0.00682110949657085616
+		# 200:	Media = 0.59267394542694096238
+				DesvioP = 0.00886955946798336642
+		# 400:	Media = 1.18080356121063223540
+				DesvioP = 0.00607925286748096233
+		# 800:	Media = 2.37680459022521972656
+				DesvioP = 0.02065180875555180928
+	* 8:
+		# 100:	Media = 0.15725185871124267023
+				DesvioP = 0.00562144961652228867
+		# 200:	Media = 0.31340045928955079235
+				DesvioP = 0.00293229675142600912
+		# 400:	Media = 0.63355095386505122512
+				DesvioP = 0.04353496579047896192
+		# 800:	Media = 1.25801627635955814988
+				DesvioP = 0.01080256424797899385
+	* 16:
+		# 100:	Media = 0.17680025100708007812
+				DesvioP = 0.03653589007584652493
+		# 200:	Media = 0.36017777919769289330
+				DesvioP = 0.02828807133456694156
+		# 400:	Media = 0.69327385425567622512
+				DesvioP = 0.03523790051800004125
+		# 800:	Media = 1.28751785755157466262
+				DesvioP = 0.02421432172474221808
+
+- 600x600:
+	* Sequencial:
+		# 100:	Media = 2.99231894016265886904
+				DesvioP = 0.01717093771047637288
+		# 200:	Media = 5.98365800380706769346
+				DesvioP = 0.03780171702241707371
+		# 400:	Media = 11.94848966598510742188
+				DesvioP = 0.05249734502476071513
+		# 800:	Media = 23.90173997879028178204
+				DesvioP = 0.13423817307773336371
+	* 2:
+		# 100:	Media = 2.37345411777496329009
+				DesvioP = 0.01824077358568911705
+		# 200:	Media = 4.75970320701599103330
+				DesvioP = 0.02641242916614564354
+		# 400:	Media = 9.52385122776031423086
+				DesvioP = 0.06032967170960976122
+		# 800:	Media = 19.00710127353668354999
+				DesvioP = 0.14922034552532975615
+	* 4:
+		# 100:	Media = 1.25173671245574946731
+				DesvioP = 0.04441997724279207055
+		# 200:	Media = 2.50496501922607439639
+				DesvioP = 0.04853726613775568438
+		# 400:	Media = 5.03025383949279802920
+				DesvioP = 0.12056876348288653178
+		# 800:	Media = 9.47041163444519007442
+				DesvioP = 0.04815686304363371584
+	* 8:
+		# 100:	Media = 0.61070346832275390625
+				DesvioP = 0.02159682985400259228
+		# 200:	Media = 1.20190944671630850493
+				DesvioP = 0.00605893770140332032
+		# 400:	Media = 2.43011121749877911924
+				DesvioP = 0.01565360855900783596
+		# 800:	Media = 4.85533025264740025762
+				DesvioP = 0.04565446907478121208
+	* 16:
+		# 100:	Media = 0.41723024845123291016
+				DesvioP = 0.01437997708782872211
+		# 200:	Media = 0.82586081027984614700
+				DesvioP = 0.03012717778200703009
+		# 400:	Media = 1.69042813777923583984
+				DesvioP = 0.03958724580434851842
+		# 800:	Media = 3.38593635559082040132
+				DesvioP = 0.15555836924948321376
+
+
+- 1000x1000;	
+	* Sequencial:
+		# 100:	Media = 8.23478488922119211679
+				DesvioP = 0.02741801066635071379
+		# 200:	Media = 16.45258188247680664062
+				DesvioP = 0.06465489197547420741
+		# 400:	Media = 33.01374530792236328125
+				DesvioP = 0.09615518462489160145
+		# 800:	Media = 65.89220268726349161170
+				DesvioP = 0.23426558651472492723
+	* 2:
+		# 100:	Media = 6.62237117290496790645
+				DesvioP = 0.03276661915375341655
+		# 200:	Media = 13.24491543769836354727
+				DesvioP = 0.04594504378642181447
+		# 400:	Media = 26.55224909782409525860
+				DesvioP = 0.11058802867982364670
+		# 800:	Media = 53.06596968173980854999
+				DesvioP = 0.18118766385305484778
+	* 4:
+		# 100:	Media = 3.33408706188201886533
+				DesvioP = 0.01866662561420315974
+		# 200:	Media = 6.64659371376037633183
+				DesvioP = 0.02998786861834425166
+		# 400:	Media = 13.32829322814941441777
+				DesvioP = 0.07311289040008826789
+		# 800:	Media = 26.67822513580322407734
+				DesvioP = 0.12506253291716315501
+	* 8:
+		# 100:	Media = 1.67459900379180903762
+				DesvioP = 0.01617313431826802525
+		# 200:	Media = 3.34532084465026846587
+				DesvioP = 0.01554405523688761302
+		# 400:	Media = 6.70299084186553972842
+				DesvioP = 0.02933392650158179668
+		# 800:	Media = 13.42140464782714914804
+				DesvioP = 0.05464296228713926007
+	*16:
+		# 100:	Media = 1.19371955394744877488		
+				DesvioP = 0.01204773505639957117
+		# 200:	Media = 2.37352735996246355654
+				DesvioP = 0.01920958957331398917
+		# 400:	Media = 4.76942973136901837705
+				DesvioP = 0.02362458452426535044
+		# 800:	Media = 9.54252662658691441777
+				DesvioP = 0.06173931257546935031
+
+
+
+-----------------------------------------------------------------------------------------
+
+Máquina:  cohiba (servidora)
+
+16 processadores de especificação (iguais):
+	processor	: 0
+	vendor_id	: AuthenticAMD
+	cpu family	: 16
+	model		: 4
+	model name	: Quad-Core AMD Opteron(tm) Processor 8387
+	stepping	: 2
+	microcode	: 0x1000065
+	cpu MHz		: 2799.996
+	cache size	: 512 KB
+	physical id	: 0
+	siblings	: 1
+	core id		: 0
+	cpu cores	: 1
+	apicid		: 0
+	initial apicid	: 0
+	fpu		: yes
+	fpu_exception	: yes
+	cpuid level	: 5
+	wp		: yes
+	flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 syscall nx mmxext fxsr_opt pdpe1gb lm 3dnowext 3dnow rep_good nopl extd_apicid pni cx16 x2apic popcnt hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw npt nrip_save
+	bogomips	: 5599.99
+	TLB size	: 1024 4K pages
+	clflush size	: 64
+	cache_alignment	: 64
+	address sizes	: 40 bits physical, 48 bits virtual
+	power management:
+
+**********
+lscpu:
+
+	Arquitetura:           x86_64
+	Modo(s) operacional da CPU32-bit, 64-bit
+	Byte Order:            Little Endian
+	CPU(s):                16
+	On-line CPU(s) list:   0-15
+	Thread(s) per núcleo  1
+	Núcleo(s) por soquete:1
+	Soquete(s):            16
+	Nó(s) de NUMA:        1
+	ID de fornecedor:      AuthenticAMD
+	Família da CPU:       16
+	Modelo:                4
+	Step:                  2
+	CPU MHz:               2799.996
+	BogoMIPS:              5599.99
+	Virtualização:       AMD-V
+	Fabricante do hypervisor:KVM
+	Tipo de virtualização:full
+	cache de L1d:          64K
+	cache de L1i:          64K
+	cache de L2:           512K
+	cache de L3:           6144K
+	NUMA node0 CPU(s):     0-15
+
+	16 físicos x 1 lógico
+
+
+
